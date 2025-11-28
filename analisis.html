@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brecha Digital – Visualizador</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+        color: #1e293b;
+    }
+
+    h1 {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .box {
+        background: #fff;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .filters {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th {
+        background: #e0e7ff;
+        padding: 10px;
+        text-align: left;
+        position: sticky;
+        top: 0;
+    }
+
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 4px 10px;
+        background: #e2e8f0;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+</style>
+</head>
+
+<body>
+
+<h1>Brecha Digital – Visualizador</h1>
+
+<div class="box">
+    <h3>Filtros</h3>
+
+    <div class="filters">
+        <!-- Departamento -->
+        <select id="departamentoSelect">
+            <option value="Todos">Todos los departamentos</option>
+
+            <!-- Lista basada en el Excel (Cuadro 7) -->
+            <option>Amazonas</option>
+            <option>Antioquia</option>
+            <option>Arauca</option>
+            <option>Atlántico</option>
+            <option>Bogotá D.C.</option>
+            <option>Bolívar</option>
+            <option>Boyacá</option>
+            <option>Caldas</option>
+            <option>Caquetá</option>
+            <option>Casanare</option>
+            <option>Cauca</option>
+            <option>Cesar</option>
+            <option>Chocó</option>
+            <option>Córdoba</option>
+            <option>Cundinamarca</option>
+            <option>Guainía</option>
+            <option>Guaviare</option>
+            <option>Huila</option>
+            <option>La Guajira</option>
+            <option>Magdalena</option>
+            <option>Meta</option>
+            <option>Nariño</option>
+            <option>Norte de Santander</option>
+            <option>Putumayo</option>
+            <option>Quindío</option>
+            <option>Risaralda</option>
+            <option>San Andrés</option>
+            <option>Santander</option>
+            <option>Sucre</option>
+            <option>Tolima</option>
+            <option>Valle del Cauca</option>
+            <option>Vaupés</option>
+            <option>Vichada</option>
+        </select>
+
+        <!-- Área -->
+        <select id="areaSelect">
+            <option value="Todas">Todas las Áreas</option>
+            <option value="Total">Total</option>
+            <option value="Cabecera">Cabecera</option>
+            <option value="Centros poblados y rural disperso">Centros poblados y rural disperso</option>
+        </select>
+    </div>
+</div>
+
+<div class="box">
+    <h3>Resultados</h3>
+    <table id="tablaDatos">
+        <thead>
+            <tr>
+                <th>Departamento</th>
+                <th>Área</th>
+                <th>Total Hogares</th>
+                <th>Hogares con Internet</th>
+                <th>% con Internet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Se llena dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+/* ==========================================================
+   DATOS DE EJEMPLO (Placeholder)
+   → Cuando me digas, los lleno con datos REALES del Excel
+   ========================================================== */
+const datos = [
+    { departamento: "Amazonas", area: "Total", hogares: 27, internet: 18.92 },
+    { departamento: "Amazonas", area: "Cabecera", hogares: 13, internet: 26.51 },
+    { departamento: "Amazonas", area: "Centros poblados y rural disperso", hogares: 14, internet: 0 },
+
+    { departamento: "Antioquia", area: "Total", hogares: 3000, internet: 40.1 },
+    { departamento: "Antioquia", area: "Cabecera", hogares: 2500, internet: 45.2 },
+    { departamento: "Antioquia", area: "Centros poblados y rural disperso", hogares: 500, internet: 12.5 },
+
+    // Puedes agregar más filas aquí o cargar desde JSON si lo deseas
+];
+
+/* ==========================================================
+   FUNCIÓN PARA RENDERIZAR TABLA
+   ========================================================== */
+function renderTabla() {
+    const dep = document.getElementById("departamentoSelect").value;
+    const area = document.getElementById("areaSelect").value;
+
+    const tbody = document.querySelector("#tablaDatos tbody");
+    tbody.innerHTML = "";
+
+    datos
+        .filter(r => dep === "Todos" || r.departamento === dep)
+        .filter(r => area === "Todas" || r.area === area)
+        .forEach(r => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${r.departamento}</td>
+                <td>${r.area}</td>
+                <td>${r.hogares}</td>
+                <td>${r.internet}</td>
+                <td>${r.internet}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+}
+
+document.getElementById("departamentoSelect").addEventListener("change", renderTabla);
+document.getElementById("areaSelect").addEventListener("change", renderTabla);
+
+// Render inicial
+renderTabla();
+</script>
+
+</body>
+</html>
+
